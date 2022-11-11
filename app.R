@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+boston_cocktails <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv')
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
