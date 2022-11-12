@@ -8,43 +8,37 @@
 #
 
 library(shiny)
-boston_cocktails <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv')
+library(dplyr)
+library(stringr)
+boston_cocktails <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv') %>%
+  mutate(ingredient = str_remove(ingredient, ",.*$"))
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+          helpText("Recipes to create drinks based on ingredients"),
+          
+          selectInput("ingredients", 
+                      label = "Choose ingredient:",
+                      choices = unique(boston_cocktails$ingredient),
+                      selected = "Light Rum"),
         ),
-
-        # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+           dataTableOutput("recipes")
         )
     )
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+    output$recipes <- renderDataTable({
+        x<-filter(boston_cocktails, ingredient==input$ingredients)
+        #y<-x$name
+        print(x)
+        #print(y)
     })
 }
 
