@@ -15,20 +15,23 @@ boston_cocktails <- readr::read_csv('https://raw.githubusercontent.com/rfordatas
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
           helpText("Recipes to create drinks based on ingredients"),
-          
           selectInput("ingredients", 
                       label = "Choose ingredient:",
                       choices = unique(boston_cocktails$ingredient),
                       selected = "Light Rum"),
-        ),
+
+          selectInput("fullrecipes",
+                      label = "Recipe for the drink:",
+                      choices = unique(boston_cocktails$name),
+                      selected = "Gauguin")
+          ),
         mainPanel(
-           dataTableOutput("recipes")
-        )
+           dataTableOutput("recipes"),
+           dataTableOutput("eachfullrecipe")
+                  )
     )
 )
 
@@ -36,9 +39,12 @@ ui <- fluidPage(
 server <- function(input, output) {
     output$recipes <- renderDataTable({
         x<-filter(boston_cocktails, ingredient==input$ingredients)
-        #y<-x$name
         print(x)
-        #print(y)
+    })
+    
+    output$eachfullrecipe<-renderDataTable({
+      y<-filter(boston_cocktails, name==input$fullrecipes)
+      print(y)
     })
 }
 
