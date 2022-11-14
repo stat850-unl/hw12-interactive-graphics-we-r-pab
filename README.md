@@ -1,5 +1,4 @@
 # Animated and Interactive Graphics
-https://phermanto2.shinyapps.io/hw12-interactive-graphics-we-r-pab/
 [link to applet](https://phermanto2.shinyapps.io/hw12-interactive-graphics-we-r-pab/)
 
 ## Instructions
